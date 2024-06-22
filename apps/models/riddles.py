@@ -15,7 +15,7 @@ class Riddles(models.Model):
         (10, "level 10"),
     ]
 
-    question = models.CharField(max_length=500)
+    question = models.TextField()
     answer = models.CharField(max_length=200)
     level = models.IntegerField(choices=LEVEL_CHOICES)
 
