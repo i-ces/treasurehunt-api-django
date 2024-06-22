@@ -2,6 +2,7 @@ from django.db import models
 
 from .level import Level
 
+
 class Riddles(models.Model):
     riddle_id = models.IntegerField()
     question = models.TextField()

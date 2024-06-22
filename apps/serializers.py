@@ -13,3 +13,8 @@ class RiddleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Riddles
         fields = ["riddle_id", "question", "is_available", "level"]
+
+class TeamSerializer(serializers.Serializer):
+    class Meta:
+        model = Team
+        fields = ["id", "name", "username", "score", "photo"]
