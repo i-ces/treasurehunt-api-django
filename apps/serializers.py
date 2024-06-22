@@ -12,4 +12,4 @@ class RiddleSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.Serializer):
     class Meta:
         model = Team
-        fields = ["id", "name", "score", "photo"]
+        fields = ["id", "name", "username", "score", "photo"]
