@@ -7,10 +7,7 @@ from .models import (
 )
 
 
-class RiddleAdmin(admin.ModelAdmin):
-    pass
 
-
-admin.site.register(Riddles, RiddleAdmin)
+admin.site.register(Riddles)
 admin.site.register(Level)
 admin.site.register(Team)
