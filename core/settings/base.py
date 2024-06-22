@@ -28,6 +28,7 @@ LOCAL_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "rest_framework_simplejwt",
 ]
 
 INSTALLED_APPS = DEFAULT_APP + LOCAL_APPS + THIRD_PARTY_APPS
@@ -79,6 +80,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 LANGUAGE_CODE = "en-us"
 
