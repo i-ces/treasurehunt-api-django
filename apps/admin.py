@@ -5,8 +5,5 @@ from .models import (
     Level,
 )
 
-class RiddleAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(Riddles, RiddleAdmin)
+admin.site.register(Riddles)
 admin.site.register(Level)
