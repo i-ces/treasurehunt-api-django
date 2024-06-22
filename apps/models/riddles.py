@@ -2,6 +2,7 @@ from django.db import models
 
 from .level import Level
 
+
 class Riddles(models.Model):
     question = models.TextField()
     answer = models.CharField(max_length=200)
