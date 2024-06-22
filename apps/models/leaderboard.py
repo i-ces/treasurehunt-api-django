@@ -1,8 +1,9 @@
 from django.db import models
 
-from .riddles import Riddles
+from .level import Level
 
 class Leaderboard(models.Model):
-    level = models.ForeignKey(Riddles)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
 
-    score = models.DecimalField()
+    score = models.PositiveIntegerField()
+    rank = models.IntegerField()
