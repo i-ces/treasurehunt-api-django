@@ -5,4 +5,4 @@ from .models import Riddles
 class RiddleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Riddles
-        fields = ["id", "question", "answer"]
+        fields = ["id", "question", "is_available"]
