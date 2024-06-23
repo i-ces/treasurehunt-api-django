@@ -14,7 +14,6 @@ class RiddleViewSet(viewsets.ModelViewSet):
     serializer_class = RiddleSerializer
     lookup_field = 'riddle_id'
     http_method_names = ['get', 'head', 'options']
-    trap_count = 0
 
     def retrive(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -24,9 +23,7 @@ class RiddleViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'], url_path='verify')
     def validate_answer(self, request, riddle_id=None):
         answer = request.query_params.get('answer')
-        print(answer)
         riddle = self.get_object()
-        print(riddle.answer)
 
         if answer is None:
             return Response({"detail": "Answer query parameter is required"}, status=400)
@@ -37,7 +34,6 @@ class RiddleViewSet(viewsets.ModelViewSet):
             if riddle.is_trap:
                 level = riddle.level
                 level.trap_count += 1
-                print(level.trap_count)
                 level.save()
 
                 if level.trap_count > 2:
