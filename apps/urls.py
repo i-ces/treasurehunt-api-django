@@ -9,7 +9,9 @@ from rest_framework_simplejwt.views import (
 
 router = routers.DefaultRouter()
 router.register(r"riddles", RiddleViewSet, basename="riddles")
-router.register(r"level", RiddleByLevelAPIView, basename="level")
+router.register(r"level/(?P<level>\d+)",
+                RiddleByLevelAPIView, basename="level")
+
 router.register(r"", LoginApiView, basename="login")
 
 # router.register(r')
