@@ -1,16 +1,15 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .views import RiddleViewSet, RiddleByLevelAPIView
-from .views import RiddleListCreateAPIView
-from .views import RiddleListCreateAPIView, LoginApiView
+from .views import RiddleViewSet, RiddleByLevelAPIView, LoginApiView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 
 router = routers.DefaultRouter()
-router.register(r"riddles", RiddleListCreateAPIView, basename="riddles")
+router.register(r"riddles", RiddleViewSet, basename="riddles")
+router.register(r"level", RiddleByLevelAPIView, basename="level")
 router.register(r"", LoginApiView, basename="login")
 
 # router.register(r')

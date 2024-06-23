@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Riddles, level
+from .models import Riddles, level, Team
 
 
 class LevelSerializer(serializers.ModelSerializer):
