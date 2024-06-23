@@ -33,7 +33,18 @@ class RiddleViewSet(viewsets.ModelViewSet):
         if riddle.answer.lower() == answer.lower() and riddle.is_trap == False:
             return Response({"detail": "Correct Answer!"}, status=200)
         else:
-            return Response({"detail": "This was a Trap. Try again!"}, status=400)
+            print(riddle.is_trap)
+            if riddle.is_trap:
+                level = riddle.level
+                level.trap_count += 1
+                print(level.trap_count)
+                level.save()
+
+                if level.trap_count > 2:
+                    Riddles.objects.filter(level=level, is_trap=True).update(is_available=False)
+                    return Response({"detail": "This was a Trap. All traps for this level are now unavailable. Try again!"}, status=400)
+
+            return Response({"detail": "This was a trap try again"}, status= 400)
 
 
 class RiddleByLevelAPIView(viewsets.ModelViewSet):
@@ -42,16 +53,7 @@ class RiddleByLevelAPIView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         level = self.kwargs.get('level')
-        return Riddles.objects.filter(level=level)
-
-
-class RiddleListCreateAPIView(viewsets.ViewSet):
-    @action(detail=False, methods=['get', 'post'], url_path=r'(?P<level>\d+)')
-    def by_level(self, request, level=None):
-        riddles = Riddles.objects.filter(level=level)
-        serializer_class = RiddleSerializer(riddles, many=True)
-        return Response(serializer_class.data)
-
+        return Riddles.objects.filter(level=level, is_available=True)
 
 class LoginApiView(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path=None)
