@@ -6,6 +6,10 @@ from rest_framework.response import Response
 
 # view for registering users
 class RegisterView(APIView):
+    def get(self, request):
+        # Assuming you want to return some information or a form for registration
+        return Response({"message": "GET request to register endpoint"})
+
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
