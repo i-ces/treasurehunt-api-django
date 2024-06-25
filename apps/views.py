@@ -1,12 +1,15 @@
 from .models import Riddles, Team
-from .serializers import LoginSerializer, RiddleSerializer
+from .serializers import LoginSerializer, RiddleSerializer, UserProgressSerializer
 from apps.helper import get_tokens_for_user
 from django.contrib.auth import authenticate
-from .models import Riddles
+from django.shortcuts import get_object_or_404
+from .models import Riddles, UserProgress, Level
 from .serializers import RiddleSerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class RiddleViewSet(viewsets.ModelViewSet):
@@ -14,6 +17,8 @@ class RiddleViewSet(viewsets.ModelViewSet):
     serializer_class = RiddleSerializer
     lookup_field = 'riddle_id'
     http_method_names = ['get', 'head', 'options']
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     def retrive(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -24,10 +29,14 @@ class RiddleViewSet(viewsets.ModelViewSet):
     def validate_answer(self, request, riddle_id=None):
         answer = request.query_params.get('answer')
         riddle = self.get_object()
+        user_progress = request.user.progress
 
         if answer is None:
             return Response({"detail": "Answer query parameter is required"}, status=400)
-        if riddle.answer.lower() == answer.lower() and riddle.is_trap == False:
+        if riddle.answer.lower() == answer.lower() and not riddle.is_trap:
+            user_progress.solved_riddles.add(riddle)
+            user_progress.save()
+
             return Response({"detail": "Correct Answer!"}, status=200)
         else:
             print(riddle.is_trap)
@@ -47,6 +56,8 @@ class RiddleViewSet(viewsets.ModelViewSet):
 class RiddleByLevelAPIView(viewsets.ModelViewSet):
     serializer_class = RiddleSerializer
     http_method_names = ['get', 'options']
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
         level = self.kwargs.get('level')
@@ -76,3 +87,20 @@ class LoginApiView(viewsets.ViewSet):
             # if user is authenticated
             return Response(get_tokens_for_user(user))
         return Response({"message": "Invalid input"}, status=400)
+
+
+class UserProgressViewSet(viewsets.ModelViewSet):
+    queryset = UserProgress.objects.all()
+    serializer_class = UserProgressSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    @action(detail=True, methods=['patch'], url_path='update-progress/(?P<level_id>\d+)')
+    def update_progress(self, request, pk=None, level_id=None):
+        user_progress = self.get_object()
+        level = get_object_or_404(Level, pk=level_id)
+
+        user_progress.current_level = level
+        user_progress.save()
+
+        return Response({"detail": f"User progress updated to level {level.name}"}, status=status.HTTP_200_OK)

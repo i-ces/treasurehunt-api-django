@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .views import RiddleViewSet, RiddleByLevelAPIView, LoginApiView
+from .views import RiddleViewSet, RiddleByLevelAPIView, LoginApiView, UserProgressViewSet
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -9,8 +9,8 @@ from rest_framework_simplejwt.views import (
 
 router = routers.DefaultRouter()
 router.register(r"riddles", RiddleViewSet, basename="riddles")
-router.register(r"level/(?P<level>\d+)",
-                RiddleByLevelAPIView, basename="level")
+router.register(r"level/(?P<level>\d+)", RiddleByLevelAPIView, basename="level")
+router.register(r'user-progress', UserProgressViewSet, basename="usr-progress")
 
 router.register(r"", LoginApiView, basename="login")
 
