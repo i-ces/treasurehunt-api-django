@@ -27,11 +27,7 @@ LOCAL_APPS = [
     "account",
 ]
 
-THIRD_PARTY_APPS = [
-    "rest_framework",
-    "rest_framework_simplejwt",
-    "corsheaders"
-]
+THIRD_PARTY_APPS = ["rest_framework", "rest_framework_simplejwt", "corsheaders"]
 
 INSTALLED_APPS = DEFAULT_APP + LOCAL_APPS + THIRD_PARTY_APPS
 
@@ -87,15 +83,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'account.UserData'
+AUTH_USER_MODEL = "account.UserData"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
 
 LANGUAGE_CODE = "en-us"
