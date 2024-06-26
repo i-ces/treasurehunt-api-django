@@ -1,7 +1,7 @@
 from .base import *
 print("prod")
 
-ALLOWED_HOSTS = ["treasurehunt-api.onrender.com/"]
+ALLOWED_HOSTS = ["treasurehunt-api.onrender.com"]
 
 CSRF_TRUSTED_ORIGINS = ["https://treasurehunt-api.onrender.com/"]
 
