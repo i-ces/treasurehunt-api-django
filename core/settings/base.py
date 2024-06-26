@@ -27,13 +27,19 @@ LOCAL_APPS = [
     "account",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "rest_framework_simplejwt", "corsheaders"]
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "corsheaders",
+    "whitenoise.runserver_nostatic",
+]
 
 INSTALLED_APPS = DEFAULT_APP + LOCAL_APPS + THIRD_PARTY_APPS
 
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
