@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -78,22 +78,25 @@ class RiddleByLevelAPIView(viewsets.ModelViewSet):
 
 
 class LoginApiView(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+
     @action(detail=False, methods=["post"], url_path=None)
     def login(self, request):
         data = request.data
         serializer = LoginSerializer(data=data)
-        
+
         if serializer.is_valid():
             username = serializer.data.get("username")
             password = serializer.data.get("password")
             user = authenticate(username=username, password=password)
-            
+
             if user is None:
                 return Response({"message": "Invalid credentials"}, status=401)
-            
+
             token, created = Token.objects.get_or_create(user=user)
             return Response({"token": token.key})  # Sending token back to client
         return Response({"message": "Invalid input"}, status=400)
+
 
 class UserProgressViewSet(viewsets.ModelViewSet):
     queryset = UserProgress.objects.all()
