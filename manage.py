@@ -8,7 +8,7 @@ from core.settings.base import DEBUG
 
 def main():
     """Run administrative tasks."""
-    if DEBUG==1:
+    if DEBUG:
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings.local")
     else:
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings.prod")
