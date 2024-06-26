@@ -1,5 +1,5 @@
-from .riddles import Riddles
 from .level import Level
+from .riddles import Riddles
 from .team import Team
 from .UserProgress import UserProgress
 

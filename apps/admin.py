@@ -1,12 +1,6 @@
 from django.contrib import admin
 
-from .models import (
-    Riddles,
-    Level,
-    Team,
-)
-
-
+from .models import Level, Riddles, Team
 
 admin.site.register(Riddles)
 admin.site.register(Level)

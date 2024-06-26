@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Riddles, level, Team, UserProgress
+from .models import Riddles, Team, UserProgress, level
 
 
 class LevelSerializer(serializers.ModelSerializer):
@@ -26,9 +26,10 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=20)
     password = serializers.CharField(max_length=30)
 
+
 class UserProgressSerializer(serializers.ModelSerializer):
     solved_riddles = RiddleSerializer(many=True, read_only=True)
 
     class Meta:
         model = UserProgress
-        fields = ('current_level', 'solved_riddles')
+        fields = ("current_level", "solved_riddles")
