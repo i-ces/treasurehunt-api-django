@@ -13,6 +13,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = os.environ.get("DEBUG")
 
+
 DEFAULT_APP = [
     "django.contrib.admin",
     "django.contrib.auth",

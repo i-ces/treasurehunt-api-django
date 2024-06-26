@@ -1,6 +1,10 @@
 from .base import *
+print("prod")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["treasurehunt-api.onrender.com/","127.0.0.1"]
+
+CSRF_TRUSTED_ORIGINS = ["https://treasurehunt-api.onrender.com/"]
+
 
 DATABASES = {
     "default": {
