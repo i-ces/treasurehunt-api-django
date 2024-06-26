@@ -9,7 +9,11 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from apps.helper import get_tokens_for_user
 
 from .models import Level, Riddles, Team, UserProgress
-from .serializers import LoginSerializer, RiddleSerializer, UserProgressSerializer
+from .serializers import LoginSerializer, RiddleSerializer, UserProgressSerializer, LevelSerializer
+
+class LevelViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Level.objects.all()
+    serializer_class = LevelSerializer
 
 
 class RiddleViewSet(viewsets.ModelViewSet):
@@ -41,7 +45,6 @@ class RiddleViewSet(viewsets.ModelViewSet):
 
             return Response({"detail": "Correct Answer!"}, status=200)
         else:
-            print(riddle.is_trap)
             if riddle.is_trap:
                 level = riddle.level
                 level.trap_count += 1
