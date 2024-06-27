@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from .models import Riddles, Team, UserProgress, level
+from .models import Riddles, Team, UserProgress, Level
 
 
 class LevelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = level
+        model = Level
         fields = ["number", "name"]
 
 
