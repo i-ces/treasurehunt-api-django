@@ -2,14 +2,19 @@ from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authtoken.models import Token
 
 from apps.helper import get_tokens_for_user
 
-from .models import Level, Riddles, Team, UserProgress
-from .serializers import LoginSerializer, RiddleSerializer, UserProgressSerializer
+from .models import Level, Riddles, Team, UserProgress, Level
+from .serializers import LoginSerializer, RiddleSerializer, UserProgressSerializer, LevelSerializer
+
+class LevelViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Level.objects.all()
+    serializer_class = LevelSerializer
 
 
 class RiddleViewSet(viewsets.ModelViewSet):
@@ -18,7 +23,7 @@ class RiddleViewSet(viewsets.ModelViewSet):
     lookup_field = "riddle_id"
     http_method_names = ["get", "head", "options"]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [TokenAuthentication]
 
     def retrive(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -41,7 +46,6 @@ class RiddleViewSet(viewsets.ModelViewSet):
 
             return Response({"detail": "Correct Answer!"}, status=200)
         else:
-            print(riddle.is_trap)
             if riddle.is_trap:
                 level = riddle.level
                 level.trap_count += 1
@@ -65,34 +69,32 @@ class RiddleByLevelAPIView(viewsets.ModelViewSet):
     serializer_class = RiddleSerializer
     http_method_names = ["get", "options"]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
         level = self.kwargs.get("level")
         return Riddles.objects.filter(level=level, is_available=True)
 
 
+
 class LoginApiView(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+
     @action(detail=False, methods=["post"], url_path=None)
     def login(self, request):
         data = request.data
         serializer = LoginSerializer(data=data)
-        # check for input validation
+
         if serializer.is_valid():
             username = serializer.data.get("username")
             password = serializer.data.get("password")
-            print(f"username: {username}, password: {password}")
-            # try to authenticate
-            # user = authenticate(username=username, password=password)
-            # print(f"user: {user}")
-            user = Team.objects.filter(username=username, password=password).first()
-            print("user type: ", type(user))
-            print(f"user_t: {user}")
-            # check if user is authenticated
+            user = authenticate(username=username, password=password)
+
             if user is None:
                 return Response({"message": "Invalid credentials"}, status=401)
-            # if user is authenticated
-            return Response(get_tokens_for_user(user))
+
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({"token": token.key})  # Sending token back to client
         return Response({"message": "Invalid input"}, status=400)
 
 
@@ -100,7 +102,7 @@ class UserProgressViewSet(viewsets.ModelViewSet):
     queryset = UserProgress.objects.all()
     serializer_class = UserProgressSerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [TokenAuthentication]
 
     @action(
         detail=True, methods=["patch"], url_path="update-progress/(?P<level_id>\d+)"
