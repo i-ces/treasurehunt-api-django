@@ -13,6 +13,7 @@ class UserProgress(models.Model):
         Level, on_delete=models.SET_NULL, null=True, blank=True
     )
     solved_riddle = models.ManyToManyField(Riddles, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Progress for {self.user.email}"

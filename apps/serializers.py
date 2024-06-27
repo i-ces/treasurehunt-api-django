@@ -32,4 +32,4 @@ class UserProgressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProgress
-        fields = ("current_level", "solved_riddles")
+        fields = ("current_level", "solved_riddles", "timestamp")
