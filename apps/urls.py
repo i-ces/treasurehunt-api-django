@@ -11,8 +11,8 @@ from .views import (
 )
 
 router = routers.DefaultRouter()
-router.register(r"levels", LevelViewSet, basename="levels")
-router.register(r"level/(?P<level>\d+)", RiddleByLevelAPIView, basename="level")
+router.register(r"level", LevelViewSet, basename="level")
+router.register(r"level/(?P<level>\d+)", RiddleByLevelAPIView, basename="level-riddles")
 router.register(r"level/(?P<level>\d+)/riddles", RiddleViewSet, basename="riddles")
 router.register(r"user-progress", UserProgressViewSet, basename="usr-progress")
 
